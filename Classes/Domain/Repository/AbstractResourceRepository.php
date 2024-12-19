@@ -99,6 +99,8 @@ abstract class AbstractResourceRepository
 
         $constraints = [];
         $constraints[] = $qb->expr()->eq('pid', $qb->createNamedParameter($pid, Connection::PARAM_INT));
+        $constraints[] = $qb->expr()->notLike('scim_external_id', $qb->createNamedParameter(''));
+        $constraints[] = $qb->expr()->notLike('scim_id', $qb->createNamedParameter(''));
 
         if ($filters) {
             $filtersContraints = $this->filterService->convertFilter($filters, $qb, $mapping, $meta);
