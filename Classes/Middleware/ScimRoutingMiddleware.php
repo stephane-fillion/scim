@@ -53,6 +53,8 @@ class ScimRoutingMiddleware implements MiddlewareInterface
                 throw new ForbiddenException('Access denied');
             }
 
+            $GLOBALS['TSFE']->no_cache = true;
+
             return $this->routingService->route($request);
         }
 
