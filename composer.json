@@ -11,7 +11,7 @@
         "typo3/testing-framework": "^8.0"
     },
     "replace": {
-        "typo3-ter/scim": "self.version"
+        "typo3-ter/ameos_scim": "self.version"
     },
     "license": "GPL-3.0-or-later",
     "authors": [
