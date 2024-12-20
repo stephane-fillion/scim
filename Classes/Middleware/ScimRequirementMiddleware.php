@@ -62,6 +62,7 @@ class ScimRequirementMiddleware implements MiddlewareInterface
         $queryParams = $request->getQueryParams();
         $queryParams['id'] = $request->getAttribute('site')->getRootPageId();
         $request = $request->withQueryParams($queryParams);
+        $request = $request->withoutAttribute('noCache', true);
 
         $request = $request->withAttribute('is_scim_request', true);
         $request = $request->withAttribute('scim_context', $context);
