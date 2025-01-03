@@ -47,7 +47,6 @@ trait ConfigurationAccess
             }
         }
 
-        $configuration['pid'] = isset($typoscript['pid']) ? (int)$typoscript['pid'] : 0;
         return $configuration;
     }
 }
