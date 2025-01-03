@@ -12,6 +12,9 @@
             <trans-unit id="scim_access.secret">
                 <source>Secret</source>
             </trans-unit>
+            <trans-unit id="scim_access.pid_frontend">
+                <source>Users and groups storage folder</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
