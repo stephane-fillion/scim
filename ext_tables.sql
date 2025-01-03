@@ -29,6 +29,7 @@ CREATE TABLE tx_ameosscim_access (
 
     name varchar(255) DEFAULT '' NOT NULL,
     secret varchar(255) DEFAULT '' NOT NULL,
+    pid_frontend int(11) DEFAULT '0' NOT NULL,
     
     PRIMARY KEY (uid),
     KEY parent (pid)

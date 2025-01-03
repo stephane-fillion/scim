@@ -43,8 +43,10 @@ class ScimRoutingMiddleware implements MiddlewareInterface
     {
         if ($request->getAttribute('is_scim_request')) {
             $authorization = $request->getHeader('authorization');
+            $scimAccess = false;
             if (isset($authorization[0]) && preg_match('/Bearer\s(\S+)/', $authorization[0], $matches)) {
-                if (!$this->isAuthorizedSecret($matches[1])) {
+                $scimAccess = $this->isAuthorizedSecret($matches[1]);
+                if (!$scimAccess) {
                     $this->logger->critical('Access denied - Bearer not match');
                     throw new ForbiddenException('Access denied');
                 }
@@ -55,6 +57,8 @@ class ScimRoutingMiddleware implements MiddlewareInterface
 
             $GLOBALS['TSFE']->no_cache = true;
 
+            $request = $request->withAttribute('scim_access', $scimAccess);
+
             return $this->routingService->route($request);
         }
 
@@ -62,12 +66,12 @@ class ScimRoutingMiddleware implements MiddlewareInterface
     }
 
     /**
-     * return true if secret is authorized
+     * return access ID if secret is authorized
      *
      * @param string $secret
-     * @return bool
+     * @return int|false
      */
-    private function isAuthorizedSecret(string $secret): bool
+    private function isAuthorizedSecret(string $secret): int|false
     {
         $hashInstance = GeneralUtility::makeInstance(PasswordHashFactory::class)->getDefaultHashInstance('BE');
 
@@ -75,7 +79,7 @@ class ScimRoutingMiddleware implements MiddlewareInterface
         $result = $qb->select('*')->from('tx_ameosscim_access')->executeQuery();
         while ($access = $result->fetchAssociative()) {
             if ($hashInstance->checkPassword($secret, $access['secret'])) {
-                return true;
+                return (int)$access['uid'];
             }
         }
         return false;
